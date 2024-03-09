@@ -25,29 +25,10 @@ export function FormProvider({ children }) {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // if(infoForm.programs1 != "" && infoForm.programs2 != ""){
-        //     alert(`You have choose 2 programs \n 1.${infoForm.programs1} \n 2.${infoForm.programs2}`)
-        //     e.target.checked=false    
-        // }
- 
-        // if (name === 'scoolClass') {
-        //     setInfoForm(prevState => ({
-        //         ...prevState,
-        //         [name]: value
-        //     }));
-        // } else {
-        //     setInfoForm(prevState => ({
-        //         ...prevState,
-        //         [name]: value
-        //     }));
-        // }
-
         setInfoForm(prevState => ({
             ...prevState,
             [name]: value
         }));
-        
-        console.log(e.target)
     };
 
     const handleSubmit = (e) => {
@@ -55,6 +36,14 @@ export function FormProvider({ children }) {
         setErrorMessage(validete(infoForm))
         setIsSubmit(true)
         validete(infoForm)
+    };
+
+    const clearErrors = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+        setErrorMessage({});
+        console.log(errorMessage); 
     };
 
     useEffect(() => { 
@@ -132,13 +121,34 @@ export function FormProvider({ children }) {
             errors.scoolClass = "Scool class is required."
         }
 
-        //Validetion sdool progr
-        if(!values.programs1 && !values.programs2){
-            errors.program ="Programs must be requerd"
+    
+        //Validetion sdool programs
+        if(values.scoolClass == "5-6 grades"){
+            if(!values.programs1 && !values.programs2){
+                errors.program ="Programs must be requerd"
+            }
+        } else if (values.scoolClass == "7-8 grades"){
+            if(!values.programs3 && !values.programs4){
+                errors.program ="Programs must be requerd"
+           }
+        } else {
+            if(!values.programs1 && !values.programs2 && !values.programs3 && !values.programs4){
+                errors.program ="Programs must be requerd"
+            }
         }
+        // console.log(values.programs1)
+        // if(!values.programs1 && !values.programs2){
+        //     errors.program ="Programs must be requerd"
+        //     console.log("ahyer ajn")
+        // } else if(!values.programs3 && !values.programs4 ){
+        //     errors.program ="Programs must be requerd"
+        //     console.log("barev")
+        // }
         
         return errors
     }
+
+
 
     const contextValue = {
         errorMessage,
@@ -146,6 +156,7 @@ export function FormProvider({ children }) {
         isSubmit,
         handleChange,
         handleSubmit,
+        clearErrors,
     };
 
     return (
